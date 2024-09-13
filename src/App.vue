@@ -7,5 +7,5 @@ defineOptions({
   name: 'App'
 });
 
-Kustomer.initialize()
+
 </script>
