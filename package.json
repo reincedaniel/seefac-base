@@ -1,8 +1,8 @@
 {
-  "name": "seefac",
+  "name": "knowledge",
   "version": "0.0.1",
-  "description": "seefac",
-  "productName": "seefac",
+  "description": "knowledge",
+  "productName": "knowledge",
   "author": "reincedaniel <reincedaniel@gmail.com>",
   "private": true,
   "scripts": {
