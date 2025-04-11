@@ -19,7 +19,8 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import Smoochx from "smooch";
+import Smooch from 'smooch';
+
 import { useQuasar } from "quasar";
 defineOptions({
   name: "IndexPage",
@@ -159,7 +160,7 @@ const arrayOfOperation = [
     isActivo: true,
   },
 ];
-const Smooch = Smoochx ?? window.Smooch;
+
 const refresh = () => {
 
   // window.location.reload()
