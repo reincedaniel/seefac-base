@@ -18,7 +18,8 @@
     "pinia": "^2.0.11",
     "quasar": "^2.16.0",
     "vue": "^3.4.18",
-    "vue-router": "^4.0.12"
+    "vue-router": "^4.0.12",
+    "smooch": "^5.4.4"
   },
   "devDependencies": {
     "@quasar/app-vite": "^1.9.0",
@@ -29,7 +30,6 @@
     "eslint-plugin-vue": "^9.0.0",
     "postcss": "^8.4.14",
     "prettier": "^2.5.1",
-    "smooch": "^5.7.3",
     "vite-plugin-checker": "^0.7.1"
   },
   "engines": {
