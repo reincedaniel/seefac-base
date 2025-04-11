@@ -1,256 +1,250 @@
 <template>
   <q-page class="">
-    <div class="row q-col-gutter-md q-pa-md">
-      <div class=" col"> <q-select square dense outlined v-model="modelSelect" :options="options" label="Estados">
-          <template v-slot:prepend>
-            <q-icon name="sort" class="cursor-pointer">
-            </q-icon></template></q-select></div>
-      <div class="col"> <q-input square dense label="Início" outlined v-model="dateStart" :mask="dateMask">
-          <template v-slot:append>
-            <q-icon name="event" class="cursor-pointer">
-              <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                <q-date v-model="dateStart" color="green-9" :mask="date">
-                  <div class="row items-center justify-end">
-                    <q-btn v-close-popup label="Confirmar" color="primary" flat />
-                  </div>
-                </q-date>
-              </q-popup-proxy>
-            </q-icon>
-          </template>
-        </q-input></div>
-      <div class="col"> <q-input square dense label="Fim" outlined v-model="dateEnd" :mask="dateMask">
-          <template v-slot:append>
-            <q-icon name="event" class="cursor-pointer">
-              <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                <q-date v-model="dateEnd" color="blue-9" :mask="date">
-                  <div class="row items-center justify-end">
-                    <q-btn v-close-popup label="Confirmar" color="primary" flat />
-                  </div>
-                </q-date>
-              </q-popup-proxy>
-            </q-icon>
-          </template>
-        </q-input></div>
-      <div class="col-3"> <q-btn class=" float-right" color="grey-9" icon="search" label="Pesquisar" square /></div>
+    <div class="row" style="display: flex; justify-content: center; align-items: center; height: 50vh">
+      <div class="text-h3">
+        <q-icon name="school" size="70px" class="text-bold text-grey-9" />
+        <span class="text-bold text-grey-9">Knowledge</span>
+        <span class="text-bold text-blue-10">Base</span>
+      </div>
     </div>
+    <div class="row flex flex-center q-gutter-md">
+      <q-input outlined dense v-model="userName" label="Utilizador" />
+      <q-select outlined style="width: 200px;" map-options dense v-model="operationId" :options="arrayOfOperation"
+        label="Operação" option-label="descricao" option-value="idOperacao" emit-value />
+      <q-btn label="Reiniciar" icon="refresh" color="primary" @click="refresh()" />
 
-    <div class="row">
-      <q-table class="col" flat bordered title="Treats" dense :rows="rows" :columns="columns" row-key="name"
-        :filter="filter">
-
-        <template v-slot:top>
-          <div class="col-12">
-            <q-input borderless color="grey-9" dense debounce="300" v-model="filter" placeholder="Pesquisar">
-              <template v-slot:append>
-                <q-btn v-if="filter" icon="clear" size="md" @click="() => { filter = null }" dense round color="grey-9"
-                  flat></q-btn>
-                <q-icon v-else name="search" />
-              </template>
-
-            </q-input>
-
-          </div>
-          <div class="col-12 q-mt-xs">
-            <q-separator size="lg" color="grey-3"></q-separator>
-          </div>
-        </template> <template v-slot:body-cell-actions="props">
-          <q-td :props="props" class="q-gutter-xs">
-            <q-btn color="red-9" icon="delete" class="float-right" size="sm" round />
-            <q-btn color="orange" icon="edit" class="float-right" size="sm" round />
-          </q-td>
-        </template>
-        <template v-slot:body-cell-select="props">
-          <q-td :props="props" class="q-gutter-xs">
-            <q-btn color="grey" icon="visibility" outline class="float-left" size="sm" round />
-          </q-td>
-        </template>
-        <template v-slot:loading>
-          <q-inner-loading showing color="grey-5" label="Processando" label-class="text-grey-6" />
-        </template></q-table>
-
-      <!--  <q-markup-table dense v-else class="shadow-0 col bg-transparent">
-    <thead>
-      <tr>
-        <th class="text-left" style="width: 150px">
-          <q-skeleton animation="blink" type="text" />
-        </th>
-        <th class="text-right">
-          <q-skeleton animation="blink" type="text" />
-        </th>
-        <th class="text-right">
-          <q-skeleton animation="blink" type="text" />
-        </th>
-        <th class="text-right">
-          <q-skeleton animation="blink" type="text" />
-        </th>
-
-
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr v-for="n in 17" :key="n">
-        <td class="text-left">
-          <q-skeleton animation="blink" type="text" width="85px" />
-        </td>
-        <td class="text-right">
-          <q-skeleton animation="blink" type="text" width="50px" />
-        </td>
-        <td class="text-right">
-          <q-skeleton animation="blink" type="text" width="35px" />
-        </td>
-        <td class="text-right">
-          <q-skeleton animation="blink" type="text" width="65px" />
-        </td>
-
-
-      </tr>
-    </tbody>
-  </q-markup-table> -->
     </div>
   </q-page>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from "vue";
+import Smooch from "smooch";
+import { useQuasar } from "quasar";
 defineOptions({
-  name: 'IndexPage'
+  name: "IndexPage",
 });
+const $q = useQuasar()
+const userName = ref("assistente");
+const operationId = ref(27);
+const arrayOfOperation = [
+  {
+    idOperacao: 1,
+    descricao: "TAAG",
+    isActivo: true,
+  },
+  {
+    idOperacao: 2,
+    descricao: "Unitel",
+    isActivo: true,
+  },
+  {
+    idOperacao: 3,
+    descricao: "Nossa Seguros",
+    isActivo: true,
+  },
+  {
+    idOperacao: 4,
+    descricao: "BFA",
+    isActivo: true,
+  },
+  {
+    idOperacao: 5,
+    descricao: "UmbiUmbi",
+    isActivo: true,
+  },
+  {
+    idOperacao: 8,
+    descricao: "CFAO Mobility",
+    isActivo: true,
+  },
+  {
+    idOperacao: 9,
+    descricao: "Pumangol",
+    isActivo: true,
+  },
+  {
+    idOperacao: 10,
+    descricao: "Partilhados",
+    isActivo: true,
+  },
+  {
+    idOperacao: 11,
+    descricao: "Academia BAI",
+    isActivo: true,
+  },
+  {
+    idOperacao: 12,
+    descricao: "ENBI",
+    isActivo: true,
+  },
+  {
+    idOperacao: 13,
+    descricao: "Mais Saúde",
+    isActivo: true,
+  },
+  {
+    idOperacao: 14,
+    descricao: "Mais Saúde Talatona",
+    isActivo: true,
+  },
+  {
+    idOperacao: 15,
+    descricao: "Uni1",
+    isActivo: true,
+  },
+  {
+    idOperacao: 16,
+    descricao: "BIC",
+    isActivo: true,
+  },
+  {
+    idOperacao: 17,
+    descricao: "BPC",
+    isActivo: true,
+  },
+  {
+    idOperacao: 18,
+    descricao: "BIC Seguros",
+    isActivo: true,
+  },
+  {
+    idOperacao: 19,
+    descricao: "Aliança Seguros",
+    isActivo: true,
+  },
+  {
+    idOperacao: 20,
+    descricao: "BFA Capital Markets",
+    isActivo: true,
+  },
+  {
+    idOperacao: 21,
+    descricao: "Áurea SDVM",
+    isActivo: true,
+  },
+  {
+    idOperacao: 22,
+    descricao: "Taag Supervisão",
+    isActivo: true,
+  },
+  {
+    idOperacao: 23,
+    descricao: "Aurea SDVM",
+    isActivo: true,
+  },
+  {
+    idOperacao: 24,
+    descricao: "BFA - Capital Markets",
+    isActivo: true,
+  },
+  {
+    idOperacao: 25,
+    descricao: "Duzinda Van-dunem",
+    isActivo: true,
+  },
+  {
+    idOperacao: 26,
+    descricao: "ÁUREA",
+    isActivo: true,
+  },
+  {
+    idOperacao: 27,
+    descricao: "Centro-Vita",
+    isActivo: true,
+  },
+  {
+    idOperacao: 28,
+    descricao: "Sonangol",
+    isActivo: true,
+  },
+];
 
-const options = [
-  'Aberto', 'Cancelado', 'Pago'
-]
-const date = 'DD/MM/YYYY'
-const dateMask = '##/##/####'
-const modelSelect = ref(null)
-const dateStart = ref(null)
-const dateEnd = ref(null)
-const filter = ref(null)
+const refresh = () => {
+  // window.location.reload()
+  localStorage.clear()
+  sessionStorage.clear()
+  indexedDB.deleteDatabase('smooch')
+  Smooch.destroy();
+  initSmooch(userName.value, operationId.value);
+  $q.notify({
+    message: 'Reiniciado com sucesso',
+    color: 'positive',
+    icon: 'check',
+    position: 'top',
+    timeout: 2000
+  })
 
-const columns = [
-  {
-    name: 'name',
-    required: true,
-    label: 'Dessert (100g serving)',
-    align: 'left',
-    field: row => row.name,
-    format: val => `${val}`,
-    sortable: true
-  },
-  { name: 'calories', align: 'center', label: 'Calories', field: 'calories', sortable: true },
-  { name: 'fat', label: 'Fat (g)', field: 'fat', sortable: true },
-  { name: 'carbs', label: 'Carbs (g)', field: 'carbs' },
-  { name: 'protein', label: 'Protein (g)', field: 'protein' },
-  { name: 'sodium', label: 'Sodium (mg)', field: 'sodium' },
-  { name: 'calcium', label: 'Calcium (%)', field: 'calcium', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
-  { name: 'iron', label: 'Iron (%)', field: 'iron', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
-]
 
-const rows = [
-  {
-    name: 'Frozen Yogurt',
-    calories: 159,
-    fat: 6.0,
-    carbs: 24,
-    protein: 4.0,
-    sodium: 87,
-    calcium: '14%',
-    iron: '1%'
-  },
-  {
-    name: 'Ice cream sandwich',
-    calories: 237,
-    fat: 9.0,
-    carbs: 37,
-    protein: 4.3,
-    sodium: 129,
-    calcium: '8%',
-    iron: '1%'
-  },
-  {
-    name: 'Eclair',
-    calories: 262,
-    fat: 16.0,
-    carbs: 23,
-    protein: 6.0,
-    sodium: 337,
-    calcium: '6%',
-    iron: '7%'
-  },
-  {
-    name: 'Cupcake',
-    calories: 305,
-    fat: 3.7,
-    carbs: 67,
-    protein: 4.3,
-    sodium: 413,
-    calcium: '3%',
-    iron: '8%'
-  },
-  {
-    name: 'Gingerbread',
-    calories: 356,
-    fat: 16.0,
-    carbs: 49,
-    protein: 3.9,
-    sodium: 327,
-    calcium: '7%',
-    iron: '16%'
-  },
-  {
-    name: 'Jelly bean',
-    calories: 375,
-    fat: 0.0,
-    carbs: 94,
-    protein: 0.0,
-    sodium: 50,
-    calcium: '0%',
-    iron: '0%'
-  },
-  {
-    name: 'Lollipop',
-    calories: 392,
-    fat: 0.2,
-    carbs: 98,
-    protein: 0,
-    sodium: 38,
-    calcium: '0%',
-    iron: '2%'
-  },
-  {
-    name: 'Honeycomb',
-    calories: 408,
-    fat: 3.2,
-    carbs: 87,
-    protein: 6.5,
-    sodium: 562,
-    calcium: '0%',
-    iron: '45%'
-  },
-  {
-    name: 'Donut',
-    calories: 452,
-    fat: 25.0,
-    carbs: 51,
-    protein: 4.9,
-    sodium: 326,
-    calcium: '2%',
-    iron: '22%'
-  },
-  {
-    name: 'KitKat',
-    calories: 518,
-    fat: 26.0,
-    carbs: 65,
-    protein: 7,
-    sodium: 54,
-    calcium: '12%',
-    iron: '6%'
-  }, {
-    name: "actions",
-    label: "Ações",
-    align: "right",
-    field: (row) => row.actions,
-  }
-]
+};
+const initSmooch = (userName, operationId) => {
+  const delegate = {
+    beforeSend(message, data) {
+      message.metadata = {
+        ...message.metadata,
+        userName,
+        operationId,
+      };
+      return message;
+    },
+  };
+  Smooch.init({
+    delegate,
+    integrationId: "67f68f0bbef82389185b4a27",
+    menuItems: {
+      imageUpload: false,
+      fileUpload: false,
+      shareLocation: false,
+    },
+
+    customText: {
+      syncConversation: "Sincronizar conversa",
+      linkChannelPageHeader: "Sincronizar sua conversa",
+      connectNotificationText:
+        "Sincronize sua conversa e continue a enviar-nos mensagens através do seu aplicativo favorito.",
+      viberChannelDescription:
+        "Conecte sua conta do Viber para ser notificado quando receber uma resposta e continue a conversa no Viber. Para começar, digitalize o código QR usando o aplicativo Viber.",
+      telegramChannelDescription:
+        "Conecte sua conta do Telegram para ser notificado quando receber uma resposta e continuar a conversa no Telegram",
+      messengerChannelDescription:
+        "Conecte sua conta do Facebook Messenger para ser notificado quando receber uma resposta e continue a conversa no Facebook Messenger.",
+      smsSendText: "Send me a text",
+      smsStartTexting: "Start Texting",
+      //Labels da caixa de envio
+      headerText: "Posso ajudar?",
+      inputPlaceholder: "Digite a mensagem...",
+      sendButtonText: "Enviar",
+      //Labels de Tempo
+      conversationListTimestampFormat: "D/MM/YYYY",
+      conversationTimestampHeaderFormat: "D/MM/YYYY, HH:MM",
+      conversationListHeaderText: "Minhas Conversas",
+      conversationListRelativeTimeJustNow: "Agora Mesmo!",
+      conversationListPreviewUserText: "Você",
+      conversationListRelativeTimeMinute: "1 minutos atrás",
+      conversationListRelativeTimeMinutes: "{value} minutos atrás",
+      conversationListRelativeTimeHour: "1 hora atrás",
+      conversationListRelativeTimeHours: "{value} horas atrás",
+      conversationListRelativeTimeYesterday: "Ontem",
+      messageIndicatorTitlePlural: "({count}) Novas mensagens",
+      messageIndicatorTitleSingular: "({count}) Nova mensagem",
+      messageRelativeTimeDay: "{value}d atrás",
+      messageRelativeTimeHour: "{value}h atrás",
+      messageRelativeTimeJustNow: "Agora Mesmo!",
+      messageRelativeTimeMinute: "{value}m atrás",
+      messageTimestampFormat: "HH:MM",
+      messageDelivered: "Entregue",
+      messageSeen: "Visto",
+      messageSending: "Enviando ...",
+      newConversationButtonText: "Nova Conversa",
+    },
+    /* customColors: {
+        brandColor: '65758e',
+        conversationColor: '65758e',
+        actionColor: '65758e',
+    }, */
+  });
+};
+onMounted(() => {
+  initSmooch(userName.value, operationId.value);
+});
 </script>
